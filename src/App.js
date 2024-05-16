@@ -3,10 +3,12 @@ import './App.css';
 
 function Calculator() {
   const [input, setInput] = useState('');
+  const [result, setResult] = useState('');
 
   const handleClick = (value) => {
-    if (input === 'Error') {
-      setInput(value);
+    if (result !== '') {
+      setInput(result + value);
+      setResult('');
     } else {
       setInput(input + value);
     }
@@ -14,23 +16,27 @@ function Calculator() {
 
   const handleClear = () => {
     setInput('');
+    setResult('');
   };
 
   const handleEqual = () => {
     try {
       if (input.trim() === '') {
-        setInput('');
+        setResult('Error');
       } else {
-        setInput(eval(input).toString());
+        const evalResult = eval(input);
+        setResult(evalResult.toString());
+        setInput('');
       }
     } catch (error) {
-      setInput('Error');
+      setResult('Error');
     }
   };
 
   return (
     <div className="calculator">
-      <div className="display">{input}</div>
+      <input type="text" className="input-bar" value={input} readOnly />
+      <div className="display">{result}</div>
       <div className="buttons">
         <button onClick={() => handleClick('1')}>1</button>
         <button onClick={() => handleClick('2')}>2</button>
